@@ -28,3 +28,7 @@ C:\...\fundingstartups> .env\Scripts\activate
 (.env) C:\...\fundingstartups> pip install -r requirements.txt
 
 
+### Creating Django project
+```text
+(.env) C:\...\fundingstartups> django-admin startproject config .
+```
