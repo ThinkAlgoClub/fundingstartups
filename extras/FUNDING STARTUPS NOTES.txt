@@ -1,0 +1,356 @@
+FUNDING STARTUPS
+----------------
+Name of repo: fundingstartups
+
+POORNIMA
+---------
+
+D:\> git clone https://github.com/ThinkAlgoClub/fundingstartups.git
+
+D:\> cd fundingstartups
+D:\fundingstartups>
+
+Open fundingstartups folder in VS Code
+
+D:\fundingstartups> python -m venv .env
+D:\fundingstartups> .env\Scripts\activate
+
+(.env) D:\fundingstartups> pip install -r requirements.txt
+(.env) D:\fundingstartups> django-admin startproject config .
+
+fundingstartups/
+	apps/
+		users/
+		startups/
+		investors/
+		funding/
+		deals/
+
+(.env) D:\fundingstartups> python manage.py startapp users apps/users
+(.env) D:\fundingstartups> python manage.py startapp startups apps/startups
+(.env) D:\fundingstartups> python manage.py startapp investors apps/investors
+(.env) D:\fundingstartups> python manage.py startapp funding apps/funding
+(.env) D:\fundingstartups> python manage.py startapp deals apps/deals
+
+Add apps to Python Path
+------------------------
+settings.py
+
+INSTALLED_APPS = [
+	...
+	'apps.users',
+	'apps.startups',
+	'apps.investors',
+	'apps.funding',
+	'apps.deals',
+]
+
+
+Each app has apps.py file, Update the name of the app in that file.
+
+apps/users/apps.py
+	name = 'users'	->	name = 'apps.users'
+
+apps/startups/apps.py
+	name = 'startups'	->  name = 'apps.startups'
+
+apps/investors/apps.py
+	name = 'investors'	->  name = 'apps.investors'
+
+apps/funding/apps.py
+	name = 'funding'	->  name = 'apps.funding'
+
+apps/deals/apps.py
+	name = 'deals'	->  name = 'apps.deals'
+
+
+INSTALLED_APPS = [
+	'apps.users.apps.UsersConfig',
+	'apps.startups.apps.UsersConfig',
+	'apps.investors.apps.UsersConfig',
+	'apps.funding.apps.UsersConfig',
+	'apps.deals.apps.UsersConfig',
+]
+
+
+
+Create __init__.py under apps/ folder:
+
+apps/
+	__init__.py
+	users/
+	startups/
+	investors/
+	funding/
+	deals/
+
+
+(.env) D:\fundingstartups> git add .
+(.env) D:\fundingstartups> git commit -m "Created apps"
+(.env) D:\fundingstartups> git push origin main
+
+
+
+
+The settings.py file
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+-> Why single settings.py is dangerous?
+
+config/settings.py
+
+Everything is inside ONE file:
+debug
+database
+security
+email
+static files
+
+
+Production risks:
+debug: 	DEBUG = True (sensitive data leak)
+database: Use MySQL or MS SQL Server or PostgreSQL
+security: No HTTPS, weak secrets
+secrets: API keys exposed in code
+
+
+Industry Standard (solution)
+----------------------------
+config/
+	settings/
+		__init__.py
+		base.py
+		dev.py
+		prod.py
+
+
+Implementation
+--------------
+Step 1:
+
+Creating 'settings' folder under config/
+
+> mkdir config/settings
+
+Create a file under 'settings' folder named __init__.py
+
+
+Step 2:
+
+Move settings.py -> base.py
+
+config/settings.py	->  config/settings/base.py
+
+
+Step 3:
+
+Create dev.py and prod.py
+
+config/settings/dev.py
+config/settings/prod.py
+
+
+
+What goes where?
+----------------
+
+base.py  -> common settings (shared)
+
+Put everything that is same for all environments in base.py:
+
+# config/settings/base.py
+
+from pathlib import Path
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
+SECRET_KEY = 'django-insecure-e(w*8c30!g86-xh@z^iqwk_9^vb5efzg)cn_g=9uu#5e+@pwkp'
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'apps.users.apps.UsersConfig',
+    'apps.startups.apps.StartupsConfig',
+    'apps.investors.apps.InvestorsConfig',
+    'apps.funding.apps.FundingConfig',
+    'apps.deals.apps.DealsConfig',
+]
+
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+ROOT_URLCONF = 'config.urls'
+
+
+dev.py -> development settings
+
+# config/settings/dev.py
+
+from base import *
+
+DEBUG = True
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+
+
+prod.py -> Production settings
+
+# config/settings/prod.py
+
+from base import *
+
+DEBUG = False
+
+ALLOWED_HOSTS = ['yourdomain.com']
+
+DATABASES = {
+	'default': {
+		'ENGINE': 'Django.db.backends.postgresql',
+		'NAME': 'prod_db',
+		'USER': 'postgres',
+		'PASSWORD': 'secure_password',
+		'HOST': 'localhost',
+		'PORT': '5432'
+	}
+}
+
+
+
+Tell Django which settings to use
+----------------------------------
+
+Option A
+- - - - -
+> python manage.py runserver settings=config.settings.dev
+
+
+Option B
+- - - - -
+
+Set environment variable:
+
+Linux / Mac:
+export
+DJANGO_SETTINGS_MODULE=config.settings.dev
+
+Windows:
+set
+DJANGO_SETTINGS_MOUDLE=config.settings.dev
+
+
+Update manage.py
+-----------------
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.dev')
+
+
+Test
+-------
+> python manage.py runserver
+
+
+
+Common Mistakes
+----------------
+- Forgetting __init__.py file
+- Wrong BASE_DIR
+	BASE_DIR = Path(__file__).resolve().parent.parent.parent
+- Import errors:
+	from base import *
+
+
+base.py = blueprint
+dev.py = local testing
+prod.py = real world
+
+
+
+Managing Secrets with .env (CRITICAL)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Stop hardcoding secrets in code
+- Use .env file safely
+- Load secrets into Django settings
+- Prevent accidental leaks to GitHub
+
+
+The problem (Very Dangerous)
+-----------------------------
+
+SECRET_KEY = 'django-insecure-e(w*8c30!g86-xh@z^iqwk_9^vb5efzg)cn_g=9uu#5e+@pwkp'
+
+DATABASES = {
+	'default': {
+		'ENGINE': 'Django.db.backends.postgresql',
+		'NAME': 'prod_db',
+		'USER': 'postgres',
+		'PASSWORD': 'secure_password',
+		'HOST': 'localhost',
+		'PORT': '5432'
+	}
+}
+
+
+
+The Solution - .env file
+-----------------------
+
+Move the secrets into a separate file:
+
+Environment:
+
+SECRET_KEY = 'django-insecure-xyz123'
+DEBUG = True
+DB_NAME = mydb
+DB_USER = postgres
+DB_PASSWORD = supersecret
+
+
+Install Required Package
+------------------------
+python-decouple
+
+> pip install python-decouple
+
+
+Create .env file
+------------------
+At project root (same level as manage.py)
+
+.env
+
+SECRET_KEY = 'django-insecure-xyz123'
+DEBUG = True
+
+DB_NAME = mydb
+DB_USER = postgres
+DB_PASSWORD = supersecret
+DB_HOST = localhost
+DB_PORT = 5432
+
+
+Update base.py
+---------------
+from decouple import config
+
+# replace hardcoded values:
+SECRET_KEY = config('SECRET_KEY')
+DEBUG = config('DEBUG', default=False, cast=bool)
+
