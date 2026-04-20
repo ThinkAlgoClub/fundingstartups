@@ -239,7 +239,7 @@ Tell Django which settings to use
 
 Option A
 - - - - -
-> python manage.py runserver settings=config.settings.dev
+> python manage.py runserver --settings=config.settings.dev
 
 
 Option B
@@ -353,4 +353,191 @@ from decouple import config
 # replace hardcoded values:
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
+
+
+Update Database Config (Production-Ready)
+- - - - - - - - - - - - - - - - - - - -
+DATABASES = {
+	'default': {
+		'ENGINE': 'django.db.backends.postgresql',
+		'NAME': config('DB_NAME'),
+		'USER': config('DB_USER'),
+		'PASSWORD': config('DB_PASSWORD'),
+		'HOST': config('DB_HOST'),
+		'PORT': config('DB_PORT'),
+	}
+}
+
+
+
+
+.gitignore (VERY IMPORTANT)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Create .gitignore file
+
+Add:
+.env
+
+
+This prevents secrets from being uploaded to GitHub
+
+
+
+Create .env.example (Best Practice)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This helps teams: Environment
+
+SECRET_KEY =
+DEBUG =
+
+DB_NAME = 
+DB_USER =
+DB_PASSWORD =
+DB_HOST =
+DB_PORT =
+
+Share this instead of .env
+
+
+
+Common Practices
+~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~
+1. .env not in root
+
+Correct location:
+	manage.py
+	.env
+
+2. Quotes in .env
+
+Wrong:
+	SECRET_KEY = 'abc123'
+
+Right:
+	SECRET_KEY = abc123
+
+
+3. Forgetting cast=bool
+
+Wrong:
+	DEBUG = config('DEBUG')
+
+Right:
+	DEBUG = config('DEBUG', cast=bool)
+
+
+
+Security Upgrade
+~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~
+
+Before:
+	SECRET_KEY = 'hardcoded'
+
+Now:
+	SECRET_KEY = config('SECRET_KEY')
+
+Means:
+	- Different key in dev vs prod
+	- No exposure in code
+	- Safe deployment
+
+
+In simple terms
+~~~~~~~~~~~~~~~
+Code = public
+.env = private
+
+
+
+Auto Switch Between 'dev' and 'prob' Settings
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Problem
+~~~~~~~~
+
+Before:
+	python manage.py runserver --settings=config.settings.dev
+
+-> manual switching
+-> deployment risk
+-> team confusion
+
+
+Solution - Environment Variable Switch
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We will control everything using:
+
+DJANGO_SETTINGS_MODULE
+
+
+Update manage.py
+~~~~~~~~~~~~~~~~
+
+Open manage.py and replace:
+
+os.environ.setdefault(
+	'DJANGO_SETTINGS_MODULE',
+	'config.settings'
+)
+
+
+With this:
+
+import os
+
+ENVIRONMENT = os.getenv('DJANGO_ENV', 'dev')
+
+if ENVIRONMENT == 'prod':
+	os.environ.setdefault(
+		'DJANGO_SETTINGS_MODULE',
+		'config.settings.prod'
+	)
+else:
+	os.environ.setdefault(
+		'DJANGO_SETTINGS_MODULE',
+		'config.settings.dev'
+	)
+
+
+
+
+Update wsgi.py and asgi.py
+~~~~~~~~~~~~~~~~~~~~~~~~~
+Do the SAME logic:
+
+import os
+
+ENVIRONMENT = os.getenv('DJANGO_ENV', 'dev')
+
+if ENVIRONMENT == 'prod':
+	os.environ.setdefault(
+		'DJANGO_SETTINGS_MODULE',
+		'config.settings.prod'
+	)
+else:
+	os.environ.setdefault(
+		'DJANGO_SETTINGS_MODULE',
+		'config.settings.dev'
+	)
+
+
+This ensures:
+	- Local -> dev settings
+	- Server -> prod setting
+
+
+Update .env
+~~~~~~~~~~~
+Now control environment here:
+DJANGO_ENV = dev
+
+For production:
+DJANGO_ENV = prod
 
