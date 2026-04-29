@@ -1,0 +1,78 @@
+<!-- Insert inside <main class="container"> of base.html -->
+<article>
+  <h1 class="page-title">Contact Us</h1>
+  
+  <div class="content-section">
+    <p>We'd love to hear from you! Whether you have prayer requests, questions about our ministry, or want to partner with us in India, please reach out.</p>
+    
+    <div class="contact-info-grid" style="display: grid; gap: 1.5rem; margin: 2rem 0;">
+      <div>
+        <h3><i class="fas fa-map-marker-alt"></i> Address</h3>
+        <address>
+          17-27 Jyothi Nagar, N. Lallaguda<br>
+          Secunderabad, Telangana 500003<br>
+          India
+        </address>
+      </div>
+      <div>
+        <h3><i class="fas fa-phone"></i> Phone</h3>
+        <p><a href="tel:+914027731093">+91 40 2773 1093</a></p>
+      </div>
+      <div>
+        <h3><i class="fas fa-envelope"></i> Email</h3>
+        <p><a href="mailto:info@jjbaptistministries.net">info@jjbaptistministries.net</a></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-section">
+    <h2>Send Us a Message</h2>
+    <form class="contact-form" action="https://formsubmit.co/your-email@jjbaptistministries.net" method="POST">
+      <!-- FormSubmit Configuration (free, no backend needed) -->
+      <input type="hidden" name="_subject" value="New Message from JJBM Website">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_next" value="https://www.jjbaptistministries.net/thank-you.html">
+      
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="name">Full Name *</label>
+          <input type="text" id="name" name="name" required autocomplete="name">
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address *</label>
+          <input type="email" id="email" name="email" required autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone (Optional)</label>
+          <input type="tel" id="phone" name="phone" autocomplete="tel">
+        </div>
+        <div class="form-group">
+          <label for="subject">Subject *</label>
+          <select id="subject" name="subject" required>
+            <option value="">Select a topic...</option>
+            <option value="prayer">Prayer Request</option>
+            <option value="ministry">Ministry Inquiry</option>
+            <option value="giving">Financial Support</option>
+            <option value="volunteer">Volunteer Opportunity</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group full-width">
+          <label for="message">Your Message *</label>
+          <textarea id="message" name="message" required placeholder="How can we pray for you or help you?"></textarea>
+        </div>
+      </div>
+      
+      <button type="submit" class="submit-btn">Send Message</button>
+      <p class="form-note"><small>* Required fields. We typically respond within 2-3 business days.</small></p>
+    </form>
+  </div>
+
+  <div class="content-section text-center mt-2">
+    <h3>Prefer to Give Online?</h3>
+    <p>Support our church planting and children's ministries in India.</p>
+    <a href="#give" class="btn-give" style="margin-top: 1rem; display: inline-block;">
+      <i class="fas fa-hand-holding-heart"></i> Give Securely Online
+    </a>
+  </div>
+</article>
