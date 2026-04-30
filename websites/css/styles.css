@@ -317,3 +317,38 @@ address { font-style: normal; line-height: 1.8; }
   body { font-size: 12pt; color: #000; }
   a { text-decoration: none; color: #000; }
 }
+
+
+
+/* ===== UPDATES ===== */
+/* 2024-06-15: Added focus styles for accessibility */
+/* ===== PAGE-SPECIFIC UTILITIES ===== */
+.hero { background-size: cover; background-position: center; }
+.lead { font-size: clamp(1.1rem, 3vw, 1.25rem); }
+.testimony-card { border-left-color: #e63946; }
+.stat-card { transition: transform 0.2s; }
+.stat-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.ministry-card { transition: transform 0.2s, box-shadow 0.2s; }
+.ministry-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(13, 74, 107, 0.15); text-decoration: none !important; color: #0d4a6b !important; }
+.program-card { transition: box-shadow 0.2s; }
+.program-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+.resource-card { transition: transform 0.2s; border: 2px solid transparent; }
+.resource-card:hover { transform: translateY(-2px); border-color: #0d4a6b; text-decoration: none !important; }
+
+/* ===== PRINT OPTIMIZATION ===== */
+@media print {
+  .nav-toggle, .site-header nav, .btn-give, .footer-section { display: none !important; }
+  body { font-size: 11pt; color: #000; background: #fff; }
+  a { text-decoration: none; color: #000; }
+  .content-section { break-inside: avoid; margin-bottom: 1.5rem; }
+}
+
+/* ===== REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
