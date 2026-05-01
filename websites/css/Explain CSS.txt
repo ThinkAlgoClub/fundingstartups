@@ -1,0 +1,103 @@
+# CSS
+
+## Reading a CSS (Basic Syntax)
+
+selector {
+    property: value;
+}
+
+
+selector
+---------
+Who are we styling?
+.container, h1, nva ul
+
+property
+---------
+What aspect are we changing?
+color, margin, display
+
+value
+------
+What should it be?
+#0d4a5b, 1rem, flex
+
+{}
+-----
+Rules for the selector
+Groups all properties
+
+;
+---
+End of a rule
+Like period of a sentence
+
+
+Reset & Base Styles
+======================
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background: #fff;
+  font-size: clamp(1rem, 2.5vw, 1.125rem);
+}
+
+
+box-sizing: border-box
+----------------------
+Makes width include padding and border. Prevents layout explosions
+
+margin/padding: 0
+-----------------
+Clears the browser default.
+Different browser styles <h1>, <ul>, etc. differenly
+
+
+scroll-behavior: smooth
+------------------------
+Makes anchor links (#contact) scroll nicely instead of jumping.
+
+
+font-size: clamp(...)
+----------------------
+Fluid typography: scales between 1rem (mobile) to 1.125rem (desktop) to 2.5rem.
+
+
+Layout Utility: The container
+=============================
+.container {
+  width: min(92%, 1200px);
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+
+min(92%, 1200px)
+----------------
+Take the smaller of these two values: 92% mobiles and 1200px for desktops
+
+margin: 0 auto
+---------------
+Center the box horizontally. top/bottom=0, left/right=auto(equal)
+
+padding: 0 1rem
+---------------
+keeps contents from touching screen edges on mobile
+
+
+position: sticky; top: 0
+------------------------
+Header stays visible when scrolling. No JS is required
+
+
+display: flex
+--------------
+Modern layout engine. Replaces float hacks
+
+
+flex-wrap: wrap
+---------------
+Allow itesm to drop to next line on small screens.
