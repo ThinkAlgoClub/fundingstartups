@@ -1,0 +1,21 @@
+/ (root)
+├── index.html                 ← Home (updated)
+├── about-us/
+│   └── index.html             ← About (updated)
+├── ministries/
+│   ├── index.html             ← Main ministries (updated)
+│   ├── children.html          ← Children (updated)
+│   ├── bi.html                ← Bible Institute (updated)
+│   ├── youth.html             ← [Create placeholder]
+│   ├── women.html             ← [Create placeholder]
+│   ├── hiv.html               ← [Create placeholder]
+│   └── medical.html           ← [Create placeholder]
+├── resources/
+│   └── index.html             ← Resources (updated)
+├── contact.html               ← NEW (functional form)
+├── thank-you.html             ← NEW (form success)
+├── css/
+│   └── styles.css             ← Updated responsive CSS
+├── js/
+│   └── main.js                ← Navigation + form JS
+└── images/                    ← Optimized WebP images
